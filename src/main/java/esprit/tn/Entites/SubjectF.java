@@ -25,7 +25,7 @@ public class SubjectF {
     private String description;
     private Date date ;
     @ManyToOne
-    private Forum forum;
+    private Publication publication;
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="subjectF")
     private List<Comment> comments;
 }

@@ -13,16 +13,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Forum {
+public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
-    private String forumName;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
+    private String publicationName;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy ="publication")
     private List<SubjectF> subjects;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
+    @ManyToMany(cascade = CascadeType.ALL,mappedBy ="publications")
     private List<User> users;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy ="publication")
     private List<Space> spaces;
 }
