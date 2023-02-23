@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/Question/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/publication/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/sendingEmail/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/events/**").permitAll()*/
+            .antMatchers("/events/**").permitAll() dd//*/
             .antMatchers("/api/delete/**").permitAll()
             .anyRequest().authenticated();
 
