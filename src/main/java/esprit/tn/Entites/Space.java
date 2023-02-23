@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Getter
@@ -22,5 +21,5 @@ public class Space {
     private Date date ;
     private String topic;
     @ManyToOne
-    private Forum forum;
+    private Publication publication;
 }
