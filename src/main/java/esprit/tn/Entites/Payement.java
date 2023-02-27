@@ -1,5 +1,6 @@
 package esprit.tn.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,10 @@ public class Payement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
-    private Float Rising;
+    private float Rising;
     @Enumerated(EnumType.STRING)
     private  Type Type;
-    @ManyToOne()
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Appointment Appointment;
 }
