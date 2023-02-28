@@ -62,6 +62,9 @@ public class User {
     @ManyToMany
     @JsonIgnore
     private List<Publication> publications;
+    @ManyToMany
+    @JsonIgnore
+    private List<Room> rooms;
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Appointment> Appointments;
