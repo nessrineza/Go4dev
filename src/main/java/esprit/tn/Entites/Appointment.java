@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +27,15 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy-mm-dd hh:mm:ss")
-    private Date Calendar;
+    @Column(name = "appointment_date", columnDefinition = "DATE")
+    private LocalDate appointmentDate;
+
+    @Column(name = "appointment_start_time", columnDefinition = "TIME")
+    private LocalTime appointmentStartTime;
+
+
+    @Column(name = "appointment_end_time", columnDefinition = "TIME")
+    private LocalTime appointmentEndTime;
     @ManyToOne
     User user;
     @OneToMany()

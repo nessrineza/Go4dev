@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,16 +28,19 @@ public class appointementServiceImp implements appointementService{
     @Override
     public void AjouterAppointement(Appointment appointment) {
         // Check if there is an existing appointment with the same date
-      List<Appointment> appointmentsWithSameDate = appointementRepository.findAppointmentsByCalendar(appointment.getCalendar());
-        if (!appointmentsWithSameDate.isEmpty() ) {
-            throw new RuntimeException("There is already an appointment scheduled on this date.");
+        if ( appointementRepository.isInBetweenTwoTimeAndDate(appointment.getAppointmentStartTime(),appointment.getAppointmentEndTime())  ) {
+            System.out.println( "There is already an appointment scheduled on this date.");
+            return;
         }
-        /* if (this.verify (appointment.getCalendar()) ) {
-            throw new RuntimeException("This is a week-end");
-        }*/
+        if ( this.isWeekend(appointment.getAppointmentDate())) {
+            System.out.println( "this is weekend");
+            return;
+        }
+
 
         // Save the new appointment
-        Appointment A = this.appointementRepository.save(appointment);
+        this.appointementRepository.save(appointment);
+
 
 
     }
@@ -59,17 +64,8 @@ public class appointementServiceImp implements appointementService{
         appointementRepository.findAll().forEach(appointments::add);
         return appointments;
     }
-    public boolean isWeekend(final Date d)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        int day = cal.get(Calendar.DAY_OF_WEEK);
-        return day == Calendar.SATURDAY || day == Calendar.SUNDAY;
-    }
-    public boolean verify (final Date date )
-    {
-        boolean state = true ;
-        if (this.isWeekend(date)){state = false;}
-        return state;
+    public  boolean isWeekend(LocalDate localDate) {
+        return (localDate.get(ChronoField.DAY_OF_WEEK) == 6)
+                || (localDate.get(ChronoField.DAY_OF_WEEK) == 7);
     }
 }
