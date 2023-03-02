@@ -19,4 +19,5 @@ public interface RoomService {
     // delete operation
     void removeRoomById(Integer idRoom);
 
+    void assignUserToRoom(Integer idRoom, Long idUser);
 }

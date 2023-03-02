@@ -60,4 +60,8 @@ public class PublicationController {
         publicationService.removePublicationById(publicationId);
         return "Deleted Successfully";
     }
+    @PutMapping("/assignUser/{id1}/{id2}")
+    public void assignUserToPublication
+            (@PathVariable("id1")Integer pubId,@PathVariable("id2")Long userId)
+    {publicationService.assignUserToPub(pubId,userId);}
 }

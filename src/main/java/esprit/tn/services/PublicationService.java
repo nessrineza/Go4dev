@@ -17,4 +17,5 @@ public interface PublicationService {
     // delete operation
     void removePublicationById(Integer idPublication);
 
+    void assignUserToPub(Integer pubId, Long userId);
 }
