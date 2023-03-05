@@ -1,10 +1,15 @@
 package esprit.tn.controllers;
 
+import esprit.tn.Entites.EmailDetails;
 import esprit.tn.Entites.Publication;
+import esprit.tn.Entites.User;
+import esprit.tn.services.EmailService;
 import esprit.tn.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 @RestController
 @RequestMapping("/publication")
@@ -12,6 +17,8 @@ import java.util.List;
 public class PublicationController {
     @Autowired
     PublicationService publicationService;
+    @Autowired
+    EmailService emailService;
 
     public PublicationController(PublicationService publicationService) {
         this.publicationService = publicationService;
@@ -21,12 +28,14 @@ public class PublicationController {
 
     // Save operation
     @PostMapping("/add")
-    public Publication savePublication(
+    public ResponseEntity<String> savePublication(
             @RequestBody Publication publication)
     {
 
-        return publicationService.addPublication(publication);
-    }
+       publicationService.addPublication(publication);
+
+        return ResponseEntity.ok("Input processed successfully.");}
+
 
     // Read operation
     @GetMapping("/publications")
@@ -60,8 +69,12 @@ public class PublicationController {
         publicationService.removePublicationById(publicationId);
         return "Deleted Successfully";
     }
+    @Transactional
+
     @PutMapping("/assignUser/{id1}/{id2}")
-    public void assignUserToPublication
+    public List<Publication> assignUserToPublication
             (@PathVariable("id1")Integer pubId,@PathVariable("id2")Long userId)
-    {publicationService.assignUserToPub(pubId,userId);}
+    {return publicationService.assignUserToPub(pubId,userId);
+    }
+    @PostMapping("/signalAction")public void signalAction(){publicationService.signalAction();}
 }

@@ -1,5 +1,6 @@
 package esprit.tn.services;
 
+import esprit.tn.Entites.EmailDetails;
 import esprit.tn.Entites.Publication;
 import esprit.tn.Entites.User;
 import esprit.tn.repository.PublicationRepository;
@@ -8,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -18,10 +21,13 @@ public class PublicationServiceImpl implements PublicationService {
     PublicationRepository publicationRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    EmailService emailService;
 
 
     @Override
     public Publication addPublication(Publication p) {
+
         return publicationRepository.save(p);
 
     }
@@ -37,9 +43,21 @@ public class PublicationServiceImpl implements PublicationService {
         publicationRepository.deleteById(idPublication);
     }
 
+    @Override
+    @Transactional
+    public List<Publication> assignUserToPub(Integer pubId, Long userId) {
+        Publication p= publicationRepository.findById(pubId).orElse(null);
+        User u=userRepository.findById(userId).orElse(null);
+
+u.getPublications().add(p);
+        userRepository.save(u);
+
+        publicationRepository.save(p);
+
+        return u.getPublications();}
 
 
-@Override
+    @Override
     public Publication retrievePublication(Integer idPublication) {
         return publicationRepository.findById(idPublication).orElse(null);
     }
@@ -53,17 +71,70 @@ public class PublicationServiceImpl implements PublicationService {
 
         return publications;
     }
-    @Override
-    public void assignUserToPub(Integer idPub, Long idUser) {
-        Publication p= publicationRepository.findById(idPub).orElse(null);
-        User u=userRepository.findById(idUser).orElse(null);
 
-            List<User> users=new ArrayList<>();
-            users.add(u);
-            p.setUsers( users);
-        userRepository.save(u);
 
-        publicationRepository.save(p);
+    public boolean containsBadWords(String input) {
 
+        List<String> badWords = Arrays.asList("badword1", "badword2", "badword3");
+
+        for (String word : badWords) {
+            if (input.toLowerCase().contains(word.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
     }
-}
+
+    @Override
+    public void signalAction() {
+
+
+            List<Publication>pubs= retrieveAllPublications();
+            for(Publication pub :pubs)
+            {if(pub.getReport()>=3&&pub.isVerif()==false)
+            {/*send mail to admin and user
+                pub.getUsers().get(1).getUsername();*/
+
+                EmailDetails emailDetails= new EmailDetails(/*admin email*/"adminMail@esprit.tn",
+                        pub.getUsers().get(0).getUsername()+"'s publication has been reported "
+                                +pub.getReport()+ " times  ",
+                        "Publication reported","");
+                emailService.sendSimpleMail(emailDetails);
+                EmailDetails emailDetails2= new EmailDetails
+                        (pub.getUsers().get(0).getEmail(),
+
+                                "Your publication has been reported "+pub.getReport()+ "times,it might be deleted.Contact admins for more info.  ",
+                                "Publication reported","");
+                emailService.sendSimpleMail(emailDetails2);
+                pub.setVerif(true);
+                updatePublication(pub);
+                System.out.println("publication reported multiple times");
+            }
+            else if
+            (pub.getReport()>5
+                            &&((pub.getReport()*0.15) >(pub.getUsers().size()))||
+                            (pub.getReport()>5&&
+                            (pub.getReport()*0.25) >(pub.getFavoris())))
+                /*les Reportes supérieur à 15% de nombre des users => supprimer automatiquement le pub
+                 * et envoyer mail à user et admin  */
+            {EmailDetails emailDetails= new EmailDetails(/*admin email*/"adminMail@esprit.tn",
+                    pub.getUsers().get(0).getUsername()
+                  +"'s publication has been deleted due to multiple reports ",
+                    "Publication deleted","");
+                emailService.sendSimpleMail(emailDetails);
+                EmailDetails emailDetails2= new EmailDetails
+                        (pub.getUsers().get(0).getEmail(),
+
+                                "Your publication has been deleted  ",
+                                "Publication deleted","");
+                emailService.sendSimpleMail(emailDetails2);
+                removePublicationById(pub.getId());
+                System.out.println("publication removed");
+                System.out.println(pub.getUsers().get(1).getUsername());
+            }
+              }
+        }
+    }
+
+
+

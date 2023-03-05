@@ -2,6 +2,7 @@ package esprit.tn.services;
 
 import esprit.tn.Entites.Publication;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface PublicationService {
@@ -17,5 +18,8 @@ public interface PublicationService {
     // delete operation
     void removePublicationById(Integer idPublication);
 
-    void assignUserToPub(Integer pubId, Long userId);
+    @Transactional
+    List<Publication> assignUserToPub(Integer pubId, Long userId);
+    public boolean containsBadWords(String input);
+    public void signalAction();
 }

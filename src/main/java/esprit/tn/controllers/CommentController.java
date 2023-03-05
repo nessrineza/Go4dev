@@ -1,7 +1,9 @@
 package esprit.tn.controllers;
 
 import esprit.tn.Entites.Comment;
+import esprit.tn.Entites.EmailDetails;
 import esprit.tn.repository.CommentRepository;
+import esprit.tn.services.BadWordFilter;
 import esprit.tn.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,12 @@ import java.util.List;
 public class CommentController {
     @Autowired
     CommentService commentService;
+   /* @Autowired
+    EmailService emailService;*/
     @Autowired
     private CommentRepository commentRepository;
 
+BadWordFilter badWordFilter;
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
@@ -28,6 +33,9 @@ public class CommentController {
     public Comment saveComment(
             @RequestBody Comment comment,@PathVariable("id")Integer pubId)
     {
+        /*bad word implementation*/
+
+        comment.setContent( badWordFilter.getCensoredText(comment.getContent()));
 
         return commentService.assignCommentToPublication(comment,pubId);
     }

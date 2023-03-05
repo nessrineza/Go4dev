@@ -1,6 +1,7 @@
 package esprit.tn.services;
 
 import esprit.tn.Entites.Comment;
+import esprit.tn.Entites.EmailDetails;
 import esprit.tn.Entites.Publication;
 import esprit.tn.repository.CommentRepository;
 import esprit.tn.repository.PublicationRepository;
@@ -18,19 +19,27 @@ public class CommentServiceImpl implements CommentService {
     CommentRepository commentRepository;
     @Autowired
     PublicationRepository publicationRepository;
+  @Autowired
+  EmailService emailService;
 
 
     @Override
     public Comment addComment(Comment c) {
 
-
-        return         commentRepository.save(c);
+return         commentRepository.save(c);
     }
     @Override
     public Comment assignCommentToPublication(Comment c,Integer publciationId) {
         Publication e =publicationRepository.findById(publciationId).orElse(null);
 
         c.setPublication(e);
+        EmailDetails emailDetails= new EmailDetails("becheikh.wassim@esprit.tn",
+                "New comment has been added to your publication",
+                "New comment","");
+        /*emailDetails.setRecipient("becheikh.wassim@esprit.tn");
+        emailDetails.setMsgBody("New comment has been added to your publication");
+        emailDetails.setSubject("New comment");*/
+        emailService.sendSimpleMail(emailDetails);
         publicationRepository.save(e);
 
           return commentRepository.save(c);

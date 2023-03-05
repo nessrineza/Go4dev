@@ -59,7 +59,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Announcement> announcements;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+
     @JsonIgnore
     private List<Publication> publications;
     @ManyToMany
