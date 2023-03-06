@@ -50,9 +50,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
+    private String resetPasswordToken;
+    private String verificationCode ;
     private boolean blocked;
-    private boolean activated;
     private  String FirstName;
     private  String LastName;
     private String PhoneNumber;
@@ -68,13 +68,15 @@ public class User {
     @OneToMany(mappedBy = "users")
     @JsonIgnore
     List<Claim>claims;
+    @ManyToMany
+    @JsonIgnore
+    private List<Room> rooms;
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-
 
 
 }

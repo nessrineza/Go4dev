@@ -1,5 +1,6 @@
 package esprit.tn.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,14 +21,18 @@ public class Sponsoring implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    private String Type;
-    private String Description;
-    private float Price;
-    private float Picture;
-    @ManyToMany(cascade = CascadeType.ALL,mappedBy ="sponsorings")
+    private String type;
+    private String description;
+    private float priceS;
+    private float picture;
+    private String quantite;
+    @JsonIgnore
+    @ManyToMany(mappedBy ="sponsorings")
     private List<Announcement> announcements;
+    @JsonIgnore
     @ManyToOne
     private Stock stocks;
+    @JsonIgnore
     @ManyToMany
     private List<Command>commands;
 }

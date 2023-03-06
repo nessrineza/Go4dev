@@ -1,9 +1,7 @@
 package esprit.tn.Entites;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcement")
@@ -21,16 +20,20 @@ public class Announcement implements Serializable {
     @Column(name="id")
     private Integer id;
     @Enumerated(EnumType.STRING)
-    private TypeA TypeA;
-    private  String Location;
-    private  String Description;
-    private float Price;
+    private TypeA typeA;
+    private  String location;
+    private  String description;
+    private float priceA;
+    private float priceTotalSpon;
+    private  float priceTotal;
+    private Integer discount;
     @Enumerated(EnumType.STRING)
-    private  Category Category;
-    private  String Picture;
+    private  Category category;
+    private  String picture;
+    @JsonIgnore
     @ManyToOne
     private User user;
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Sponsoring> sponsorings;
 
 

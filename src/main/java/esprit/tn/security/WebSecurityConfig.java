@@ -13,21 +13,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(
-    // securedEnabled = true,
-    // jsr250Enabled = true,
-    prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -45,9 +39,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
+  public DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+
+    return authProvider;
+  }
+
+  @Bean
   @Override
   public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    return authConfig.getAuthenticationManager();
   }
 
   @Bean
@@ -61,22 +70,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().antMatchers("/auth/**").permitAll()
-            .antMatchers("/admin/**").permitAll()
-            .antMatchers("/client/**").permitAll()
-            /*.antMatchers("/claim/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/Answers/**").hasAuthority("ROLE_CLIENT")
-            .antMatchers("/likes/**").hasAuthority("ROLE_EMPLOYEE")
-            .antMatchers("/NotificationObject/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/Notification/**").hasAuthority("ROLE_CLIENT")
-            .antMatchers("/Questionnaire/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/Question/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/publication/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/sendingEmail/**").hasAuthority("ROLE_ADMIN")
-            .antMatchers("/events/**").permitAll() dd//*/
-            .antMatchers("/api/delete/**").permitAll()
+            .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+            .antMatchers("/client/**").hasAuthority("ROLE_CLIENT")
             .anyRequest().authenticated();
-
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
   }
+
 }
