@@ -50,35 +50,33 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
+    private String resetPasswordToken;
+    private String verificationCode ;
     private boolean blocked;
-    private boolean activated;
     private  String FirstName;
     private  String LastName;
     private String PhoneNumber;
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Announcement> announcements;
-    @ManyToMany(fetch = FetchType.EAGER)
-
-    @JsonIgnore
-    private List<Publication> publications;
     @ManyToMany
     @JsonIgnore
-    private List<Room> rooms;
+    private List<Publication> publications;
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Appointment> Appointments;
     @OneToMany(mappedBy = "users")
     @JsonIgnore
     List<Claim>claims;
+    @ManyToMany
+    @JsonIgnore
+    private List<Room> rooms;
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-
 
 
 }

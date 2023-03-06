@@ -31,7 +31,7 @@ public class Publication {
     @Column(name = "date")
     private Date date ;
     private boolean verif;
-@PositiveOrZero
+    @PositiveOrZero
     @Column(name = "report"/*, columnDefinition = "INT DEFAULT '0'"*/)
     private Integer report=0;
     @PositiveOrZero
@@ -46,3 +46,4 @@ public class Publication {
     private List<User> users;
 
 }
+

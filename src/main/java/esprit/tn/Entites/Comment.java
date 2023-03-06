@@ -35,3 +35,4 @@ public class Comment {
     @JsonIgnore
     private Publication publication;
 }
+

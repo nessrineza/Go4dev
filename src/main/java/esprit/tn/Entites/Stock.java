@@ -15,14 +15,25 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Stock")
-
 public class Stock implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Integer id;
-    private Integer Quantity;
-    private  String Description;
+    @Column(name="idStock")
+    private Integer idStock;
+
+    private Integer quantity;
+
+    private Integer quantityMin;
+
+    private  String libelleStock;
+
+    private boolean checked;
+    @Temporal(TemporalType.DATE)
+    private Date createdAt;
+
+    @Temporal(TemporalType.DATE)
+    private Date updatedAt;
+
     @OneToMany(mappedBy = "stocks")
     List<Sponsoring> sponsorings;
 }
