@@ -1,9 +1,11 @@
 package esprit.tn.Service;
 
+import esprit.tn.Dto.AnnonceDto;
 import esprit.tn.Entites.Announcement;
 import esprit.tn.Entites.Category;
 import esprit.tn.Entites.Sponsoring;
 import esprit.tn.Entites.TypeA;
+import esprit.tn.Mappers.AnnonceMapper;
 import esprit.tn.Repository.IAnnonceRepository;
 import esprit.tn.Repository.ISponsoringRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("Annonce")
 
 public class AnnonceServiceImpl implements IAnnonceService{
     private static final int DISCOUNT_THRESHOLD=5;
-    private static final int DISCOUNT_PERCENTAGE=10;
-
     private final IAnnonceRepository annonceRepository;
     private final ISponsoringRepository sponsoringRepository;
     @Autowired
@@ -66,6 +67,11 @@ public class AnnonceServiceImpl implements IAnnonceService{
 
             announcement.getSponsorings().add(sponsoring);
             annonceRepository.save(announcement);
+
+            float priceTotalSpon = annonceRepository.sumPrice(idAnnonce);
+            float priceTotal = announcement.getPriceA()+priceTotalSpon;
+            announcement.setPriceTotalSpon(priceTotalSpon);
+            announcement.setPriceTotal(priceTotal);
 
 
         return announcement;
@@ -135,17 +141,29 @@ public class AnnonceServiceImpl implements IAnnonceService{
     }
 
     @Override
-    public List<Announcement> getByPrice(float price) {
+    public List<Announcement> getByPrice(float priceA) {
         List<Announcement> announcements = new ArrayList<>();
-        annonceRepository.findByPrice(price).forEach(announcements::add);
+        annonceRepository.findByPriceA(priceA).forEach(announcements::add);
         return announcements;
     }
     @Override
      public float calculateDiscountedPrice(Integer id, Integer discount) {
         Announcement announcement= annonceRepository.findById(id).orElse(null);
-            float discountAmount = announcement.getPrice() * discount / 100;
-            float discountedPrice = announcement.getPrice() - discountAmount;
+            float discountAmount = announcement.getPriceA() * discount / 100;
+            float discountedPrice = announcement.getPriceA() - discountAmount;
             return discountedPrice;
+        }
+        @Override
+        public AnnonceDto add(AnnonceDto annonceDto){
+            Announcement announcement = annonceRepository.save(AnnonceMapper.mapToEntity(annonceDto));
+        return AnnonceMapper.mapToDto(announcement);
+        }
+        @Override
+        public List<AnnonceDto> retrieveAll(){
+        return annonceRepository.findAll()
+                .stream()
+                .map(announcement -> AnnonceMapper.mapToDto(announcement))
+                .collect(Collectors.toList());
         }
 
 }

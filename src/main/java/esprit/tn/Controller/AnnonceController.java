@@ -1,15 +1,23 @@
 package esprit.tn.Controller;
 
+import com.itextpdf.text.DocumentException;
+import esprit.tn.Dto.AnnonceDto;
 import esprit.tn.Entites.Announcement;
 import esprit.tn.Entites.Category;
 import esprit.tn.Entites.TypeA;
 import esprit.tn.Service.AnnonceServiceImpl;
 import esprit.tn.Service.MailingServiceImpl;
+import esprit.tn.pdf.PDFGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -95,8 +103,30 @@ public class AnnonceController {
     public float getDiscountedPrice(@PathVariable("id") Integer id,
                                      @PathVariable("discount") Integer discount)
     {
-        float discountedPrice = annonceServiceImpl.calculateDiscountedPrice(id, discount);
-        return discountedPrice;
+        float discountedPriceA = annonceServiceImpl.calculateDiscountedPrice(id, discount);
+        return discountedPriceA;
+    }
+    @PostMapping("/addDto")
+        public AnnonceDto add(@RequestBody AnnonceDto entity) {
+        return annonceServiceImpl.add(entity);
+        }
+    @GetMapping("/retrieveAllDto")
+   public List<AnnonceDto> retrieveAll(){
+        return annonceServiceImpl.retrieveAll();
+    }
+
+    @GetMapping("/pdf/annonce")
+    public void generator(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=pdf_"+currentDateTime+".pdf";
+        response.setHeader(headerkey, headervalue);
+        List<Announcement> announcements = annonceServiceImpl.retrieveAllAnnouncements();
+        PDFGenerator generetorUser = new PDFGenerator();
+        generetorUser.setAnnouncements(announcements);
+        generetorUser.generate(response);
     }
 }
 

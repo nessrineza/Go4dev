@@ -1,5 +1,6 @@
 package esprit.tn.Service;
 
+import esprit.tn.Dto.AnnonceDto;
 import esprit.tn.Entites.Announcement;
 import esprit.tn.Entites.Category;
 import esprit.tn.Entites.TypeA;
@@ -28,4 +29,8 @@ public interface IAnnonceService {
     List<Announcement> getByPrice(float price);
 
     float calculateDiscountedPrice(Integer id, Integer discount);
+
+    AnnonceDto add(AnnonceDto annonceDto);
+
+    List<AnnonceDto> retrieveAll();
 }

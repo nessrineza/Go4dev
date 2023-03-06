@@ -6,17 +6,19 @@ import esprit.tn.Entites.TypeA;
 import org.springframework.context.annotation.Description;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface IAnnonceRepository extends JpaRepository<Announcement, Integer> {
     //List<Announcement> findByid(Integer id);
     List<Announcement> findByCategory(Category category);
     List<Announcement> findByDescription(String description);
     List<Announcement> findByLocation(String location);
-    List<Announcement> findByPrice(float price);
+    List<Announcement> findByPriceA(float priceA);
     List<Announcement> findByTypeA(TypeA typeA);
 
-    @Query("select sum (sp.price) from Announcement ac join ac.sponsorings sp where ac.id = :id")
+    @Query("select sum (sp.priceS) from Announcement ac join ac.sponsorings sp where ac.id = :id")
     float sumPrice(Integer id);
 }

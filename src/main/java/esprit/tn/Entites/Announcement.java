@@ -1,10 +1,7 @@
 package esprit.tn.Entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcement")
@@ -26,7 +24,9 @@ public class Announcement implements Serializable {
     private TypeA typeA;
     private  String location;
     private  String description;
-    private float price;
+    private float priceA;
+    private float priceTotalSpon;
+    private float priceTotal;
     private Integer discount;
     @Enumerated(EnumType.STRING)
     private  Category category;
@@ -34,7 +34,7 @@ public class Announcement implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User user;
-    @ManyToMany
+    @ManyToMany ( cascade= CascadeType.ALL , fetch = FetchType.EAGER)
     private List<Sponsoring> sponsorings;
    // @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)// (fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})//(fetch = FetchType.EAGER)
    // @JoinTable(name = "announcement_sponsorings",joinColumns = { @JoinColumn(name = "id") },inverseJoinColumns = { @JoinColumn(name = "id") })

@@ -24,10 +24,11 @@ public class Sponsoring implements Serializable {
     private Integer id;
     private String type;
     private String description;
-    private float price;
+    private float priceS;
     private String picture;
+    private String quantite;
     @JsonIgnore
-   @ManyToMany(mappedBy ="sponsorings",cascade = {CascadeType.PERSIST})
+   @ManyToMany(mappedBy ="sponsorings")
     private List<Announcement> announcements;
     @JsonIgnore
     @ManyToOne
@@ -38,4 +39,11 @@ public class Sponsoring implements Serializable {
     //@ManyToMany(mappedBy = "sponsoring",cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER) //(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "equipes")//(fetch = FetchType.EAGER, mappedBy = "equipes")
     //@JsonIgnore
    // List<Announcement> announcements = new ArrayList<>();
+
+
+    public Sponsoring(String type, float priceS, String quantite) {
+        this.type = type;
+        this.priceS = priceS;
+        this.quantite = quantite;
+    }
 }
