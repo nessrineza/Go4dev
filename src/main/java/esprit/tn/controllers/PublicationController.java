@@ -31,10 +31,12 @@ public class PublicationController {
     public ResponseEntity<String> savePublication(
             @RequestBody Publication publication)
     {
-
+if(publicationService.isFormal(publication.getSubject())){
        publicationService.addPublication(publication);
 
         return ResponseEntity.ok("Input processed successfully.");}
+else{
+    return ResponseEntity.ok("Your publication wasn't added because its subject context wasn't formal") ;}}
 
 
     // Read operation

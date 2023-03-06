@@ -20,4 +20,6 @@ public interface RoomService {
     void removeRoomById(Integer idRoom);
 
     void assignUserToRoom(Integer idRoom, Long idUser);
+
+    void signalAction();
 }

@@ -20,6 +20,7 @@ public interface PublicationService {
 
     @Transactional
     List<Publication> assignUserToPub(Integer pubId, Long userId);
-    public boolean containsBadWords(String input);
-    public void signalAction();
-}
+     boolean containsBadWords(String input);
+     void signalAction();
+     Boolean isFormal(String text) ;
+    }

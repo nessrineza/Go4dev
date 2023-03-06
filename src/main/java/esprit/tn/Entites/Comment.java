@@ -23,6 +23,7 @@ public class Comment {
     private int likes;
     private int unlikes;
     private boolean verif;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date")

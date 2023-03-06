@@ -1,8 +1,10 @@
 package esprit.tn.controllers;
 
 import esprit.tn.Entites.Room;
+import esprit.tn.services.PublicationService;
 import esprit.tn.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +15,8 @@ import java.util.List;
 public class RoomController {
     @Autowired
     RoomService roomService;
-
+   @Autowired
+   PublicationService publicationService;
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
     }
@@ -22,12 +25,16 @@ public class RoomController {
 
     // Save operation
     @PostMapping("/add")
-    public Room saveRoom(
+    public ResponseEntity<String> saveRoom(
             @RequestBody Room room)
     {
+        if(publicationService.isFormal(room.getTopic())){
+            roomService.addRoom(room);
 
-        return roomService.addRoom(room);
-    }
+            return ResponseEntity.ok("Input processed successfully.");}
+        else{
+            return ResponseEntity.ok("Your room wasn't added because its topic wasn't well formal") ;}}
+
 
     // Read operation
     @GetMapping("/Rooms")
