@@ -21,8 +21,8 @@ public class Forum {
     private String forumName;
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
     private List<SubjectF> subjects;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
-    private List<User> users;
+   /* @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
+    private List<User> users;*/
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="forum")
     private List<Space> spaces;
 }

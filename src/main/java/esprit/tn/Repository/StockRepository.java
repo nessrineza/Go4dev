@@ -1,7 +1,5 @@
 package esprit.tn.Repository;
 
-import esprit.tn.Entites.Claim;
-import esprit.tn.Entites.Partner;
 import esprit.tn.Entites.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
