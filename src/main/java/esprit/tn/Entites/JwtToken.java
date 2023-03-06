@@ -6,26 +6,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
+@Table(name = "jwt_tokens")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+public class JwtToken implements Serializable {
 
-
-public class SubjectF {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Integer id;
-    private String title;
-    private String description;
-    private Date date ;
-    @ManyToOne
-    private Forum forum;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy ="subjectF")
-    private List<Comment> comments;
+    private Long id;
+
+    @Column(name = "token")
+    private String token;
+
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    @Column(name = "expiration_date")
+    private Date expirationDate;
+
 }
+
+
