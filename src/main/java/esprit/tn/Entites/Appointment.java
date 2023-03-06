@@ -1,13 +1,18 @@
 package esprit.tn.Entites;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -22,11 +27,24 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
-    private Calendar Calendar;
+
+    @Column(name = "appointment_date", columnDefinition = "DATE")
+    private LocalDate appointmentDate;
+
+    @Column(name = "appointment_start_time", columnDefinition = "TIME")
+    private LocalTime appointmentStartTime;
+
+
+    @Column(name = "appointment_end_time", columnDefinition = "TIME")
+    private LocalTime appointmentEndTime;
+
+
+
+
     @ManyToOne
     User user;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany()
     private Set<Announcement> Announcements;
-    @OneToMany(mappedBy = "Appointment")
-    private List<Payement> listPayement;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="Appointment")
+    Set<Payement> listPayement;
 }

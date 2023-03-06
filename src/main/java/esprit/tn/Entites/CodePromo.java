@@ -24,5 +24,5 @@ public class CodePromo implements Serializable {
     private  float pourcentage;
     @Temporal(TemporalType.DATE)
     private Date dateexpiration;
-    
+
 }
