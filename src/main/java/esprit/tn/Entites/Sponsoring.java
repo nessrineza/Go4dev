@@ -25,10 +25,17 @@ public class Sponsoring implements Serializable {
     private String type;
     private String description;
     private float priceS;
+<<<<<<< HEAD
     private String picture;
     private String quantite;
     @JsonIgnore
    @ManyToMany(mappedBy ="sponsorings")
+=======
+    private float picture;
+    private String quantite;
+    @JsonIgnore
+    @ManyToMany(mappedBy ="sponsorings")
+>>>>>>> cd9fc34a7bbd95e87e213de16642fd1ed8f823b5
     private List<Announcement> announcements;
     @JsonIgnore
     @ManyToOne

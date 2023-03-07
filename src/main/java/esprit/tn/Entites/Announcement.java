@@ -26,7 +26,11 @@ public class Announcement implements Serializable {
     private  String description;
     private float priceA;
     private float priceTotalSpon;
+<<<<<<< HEAD
     private float priceTotal;
+=======
+    private  float priceTotal;
+>>>>>>> cd9fc34a7bbd95e87e213de16642fd1ed8f823b5
     private Integer discount;
     @Enumerated(EnumType.STRING)
     private  Category category;
@@ -34,7 +38,11 @@ public class Announcement implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User user;
+<<<<<<< HEAD
     @ManyToMany ( cascade= CascadeType.ALL , fetch = FetchType.EAGER)
+=======
+    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+>>>>>>> cd9fc34a7bbd95e87e213de16642fd1ed8f823b5
     private List<Sponsoring> sponsorings;
    // @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)// (fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})//(fetch = FetchType.EAGER)
    // @JoinTable(name = "announcement_sponsorings",joinColumns = { @JoinColumn(name = "id") },inverseJoinColumns = { @JoinColumn(name = "id") })
