@@ -15,18 +15,9 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-<<<<<<<< HEAD:src/main/java/esprit/tn/Entites/CodePromo.java
-@Table(name = "CodePromo")
-public class CodePromo implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Integer id;
-    private  String nom;
-    private  float pourcentage;
-    @Temporal(TemporalType.DATE)
-    private Date dateexpiration;
-========
+
+
+
 public class JwtToken implements Serializable {
 
     @Id
@@ -41,6 +32,6 @@ public class JwtToken implements Serializable {
 
     @Column(name = "expiration_date")
     private Date expirationDate;
->>>>>>>> cd9fc34a7bbd95e87e213de16642fd1ed8f823b5:src/main/java/esprit/tn/Entites/JwtToken.java
+
 
 }

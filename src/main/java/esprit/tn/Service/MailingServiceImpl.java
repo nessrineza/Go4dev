@@ -21,13 +21,19 @@ public class MailingServiceImpl {
                                 String body,
                                 String Subject){
         SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setFrom("piproject840@gmail.com");
+        message.setFrom("oumaima.barika@esprit.tn");
+        //message.setFrom("go4dev@outlook.com");
         message.setTo(toEmail);
         message.setText(body);
         message.setSubject(Subject);
-
-        javaMailSender.send(message);
+try {
+    javaMailSender.send(message);
+}
+catch (Exception e)
+{
+    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    System.out.println(e.getMessage());
+}
         System.out.println("Mail Send...");
     }
 
@@ -41,7 +47,7 @@ public class MailingServiceImpl {
         MimeMessageHelper mimeMessageHelper
                 = new MimeMessageHelper(mimeMessage, true);
 
-        mimeMessageHelper.setFrom("piproject840@gmail.com");
+        mimeMessageHelper.setFrom("go4dev@outlook.com");
         mimeMessageHelper.setTo(toEmail);
         mimeMessageHelper.setText(body);
         mimeMessageHelper.setSubject(subject);

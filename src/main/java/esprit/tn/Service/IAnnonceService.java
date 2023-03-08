@@ -5,10 +5,11 @@ import esprit.tn.Entites.Announcement;
 import esprit.tn.Entites.Category;
 import esprit.tn.Entites.TypeA;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IAnnonceService {
-    Announcement addAnnonce(Announcement a);
+    Announcement addAnnonce(Announcement a ,Long userId);
 
     Announcement updateAnnonce(Announcement d, Integer id);
 
@@ -20,7 +21,10 @@ public interface IAnnonceService {
 
    // Announcement asignSponsoring(Integer idSponsoring, Integer idAnnonce);
 
-    Announcement assignAnnonceToSponsoring(Integer idAnnonce, Integer IdSponsoring);
+   // Announcement assignAnnonceToSponsoring(Integer idAnnonce, Integer IdSponsoring);
+
+
+    Announcement assignAnnonceToSponsoring(Integer idAnnonce, Integer IdSponsoring, float disc);
 
     List<Announcement> getByCategory(Category category);
     List<Announcement> getByTypeA(TypeA typeA);
@@ -28,7 +32,8 @@ public interface IAnnonceService {
     List<Announcement> getByDescription(String description);
     List<Announcement> getByPrice(float price);
 
-    float calculateDiscountedPrice(Integer id, Integer discount);
+    float calculateDiscountedPrice(Integer id, float discount);
+    void verifyAnnouncementById(Integer id);
 
     AnnonceDto add(AnnonceDto annonceDto);
 

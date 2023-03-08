@@ -25,17 +25,10 @@ public class Sponsoring implements Serializable {
     private String type;
     private String description;
     private float priceS;
-<<<<<<< HEAD
     private String picture;
     private String quantite;
     @JsonIgnore
-   @ManyToMany(mappedBy ="sponsorings")
-=======
-    private float picture;
-    private String quantite;
-    @JsonIgnore
     @ManyToMany(mappedBy ="sponsorings")
->>>>>>> cd9fc34a7bbd95e87e213de16642fd1ed8f823b5
     private List<Announcement> announcements;
     @JsonIgnore
     @ManyToOne
@@ -45,7 +38,7 @@ public class Sponsoring implements Serializable {
     private List<Command>commands;
     //@ManyToMany(mappedBy = "sponsoring",cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER) //(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "equipes")//(fetch = FetchType.EAGER, mappedBy = "equipes")
     //@JsonIgnore
-   // List<Announcement> announcements = new ArrayList<>();
+    // List<Announcement> announcements = new ArrayList<>();
 
 
     public Sponsoring(String type, float priceS, String quantite) {

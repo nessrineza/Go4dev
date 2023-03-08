@@ -5,10 +5,14 @@ import esprit.tn.Dto.AnnonceDto;
 import esprit.tn.Entites.Announcement;
 import esprit.tn.Entites.Category;
 import esprit.tn.Entites.TypeA;
+import esprit.tn.Entites.User;
 import esprit.tn.Service.AnnonceServiceImpl;
 import esprit.tn.Service.MailingServiceImpl;
 import esprit.tn.pdf.PDFGenerator;
+import esprit.tn.services.IUserService;
+import esprit.tn.services.UserService;
 import lombok.AllArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -25,32 +29,57 @@ import java.util.List;
 @RequestMapping("/annonce")
 public class AnnonceController {
 
+
+    UserService userService;
     AnnonceServiceImpl annonceServiceImpl;
 
     MailingServiceImpl mailingServiceImpl;
+    esprit.tn.Repository.IAnnonceRepository annonceRepository;
 
 
     @PostMapping("/addAnnonce")
-    public void addAnnonce(@RequestBody Announcement a)
+    public void addAnnonce(@RequestBody Announcement a )
     {
-        annonceServiceImpl.addAnnonce(a);
-        mailingServiceImpl.sendSimpleEmail("broumaima@yahoo.com","Ajout d'une annonce","Votre annonce est ajoutée avec succées!");
 
+        User user= userService.findUserbyId(a.getUsId());
+        List<Announcement> announcementsUser =annonceRepository.findAnnouncementByUsId(user.getId());
+
+        int nombreannonce=0;
+        for (Announcement announcement:announcementsUser
+             ) {
+            if(!announcement.isVerified()){
+                nombreannonce++;
+            }
+        }
+
+        if(nombreannonce%5 ==0&& user.getCodePromo()==null){
+            String randomCode = RandomString.make(6);
+            user.setCodePromo(randomCode);
+            userService.updateUser(user);
+            mailingServiceImpl.sendSimpleEmail(user.getEmail(),"Votre annonce est ajoutée avec succées! Felicitation vous gagnez un Code promo remise : "+randomCode,"Ajout d'une annonce");
+            annonceServiceImpl.addAnnonce(a,a.getUsId());
+        }else {
+            annonceServiceImpl.addAnnonce(a,a.getUsId());
+            mailingServiceImpl.sendSimpleEmail(user.getEmail(), "Votre annonce est ajoutée avec succées!", "Ajout d'une annonce");
+        }
+        System.out.println(nombreannonce +"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
 
     }
     @PutMapping("/updateAnnonce/{id}")
     Announcement updateAnnonce(@RequestBody Announcement a,@PathVariable("id") Integer id)
     {
-
-        mailingServiceImpl.sendSimpleEmail("broumaima@yahoo.com","Modification d'une annonce","Votre annonce est modifiée avec succées!");
+        User user= userService.findUserbyId(a.getUsId());
+        mailingServiceImpl.sendSimpleEmail(user.getEmail(),"Modification d'une annonce","Votre annonce est modifiée avec succées!");
 
         return annonceServiceImpl.updateAnnonce(a,id);
     }
     @DeleteMapping("/deleteAnnonce/{id}")
     void removeAnnonce(@PathVariable ("id") Integer id){
+        Announcement a= annonceServiceImpl.retrieveAnnouncement(id);
+        User user= userService.findUserbyId(a.getUsId());
         annonceServiceImpl.removeAnnonce(id);
-        mailingServiceImpl.sendSimpleEmail("broumaima@yahoo.com","Suppression d'une annonce","Votre annonce est suppriméé!");
+        mailingServiceImpl.sendSimpleEmail(user.getEmail(),"Suppression d'une annonce","Votre annonce est suppriméé!");
     }
     @GetMapping("/getAnnouncement/{id}")
     Announcement retrieveAnnouncement(@PathVariable("id") Integer id)
@@ -97,14 +126,15 @@ public class AnnonceController {
 
      @PutMapping("assignAnnonceToSpon/{idAn}/{idSpo}")
      public Announcement assignAnnonceToSponsoring(@PathVariable("idAn") Integer idAnnonce,@PathVariable("idSpo") Integer IdSponsoring){
-        return annonceServiceImpl.assignAnnonceToSponsoring(idAnnonce,IdSponsoring);
+        Announcement announcement= annonceRepository.findById(idAnnonce).orElse(null);
+        return annonceServiceImpl.assignAnnonceToSponsoring(idAnnonce,IdSponsoring, announcement.getDiscount());
      }
     @GetMapping("/{id}/{discount}")
     public float getDiscountedPrice(@PathVariable("id") Integer id,
                                      @PathVariable("discount") Integer discount)
     {
-        float discountedPriceA = annonceServiceImpl.calculateDiscountedPrice(id, discount);
-        return discountedPriceA;
+        float discountedPriceTotal = annonceServiceImpl.calculateDiscountedPrice(id, discount);
+        return discountedPriceTotal;
     }
     @PostMapping("/addDto")
         public AnnonceDto add(@RequestBody AnnonceDto entity) {
@@ -123,11 +153,16 @@ public class AnnonceController {
         String headerkey = "Content-Disposition";
         String headervalue = "attachment; filename=pdf_"+currentDateTime+".pdf";
         response.setHeader(headerkey, headervalue);
-        List<Announcement> announcements = annonceServiceImpl.retrieveAllAnnouncements();
+        List<AnnonceDto> annonceDtos = annonceServiceImpl.retrieveAll();
         PDFGenerator generetorUser = new PDFGenerator();
-        generetorUser.setAnnouncements(announcements);
+        generetorUser.setAnnonceDtos(annonceDtos);
         generetorUser.generate(response);
     }
+    @PostMapping("/verifyAnnouncement/{id}")
+    void verifyAnnoncement(@PathVariable Integer id){
+        annonceServiceImpl.verifyAnnouncementById(id);
+    }
+
 }
 
 

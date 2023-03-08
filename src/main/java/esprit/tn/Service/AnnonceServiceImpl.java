@@ -29,10 +29,13 @@ public class AnnonceServiceImpl implements IAnnonceService{
         this.sponsoringRepository = sponsoringRepository;
     }
     @Override
-    public Announcement addAnnonce(Announcement a)
+    public Announcement addAnnonce(Announcement a,Long id)
     {
+        a.setUsId(id);
+        a.setVerified(true);
         return annonceRepository.save(a);
     }
+
     @Override
     public Announcement updateAnnonce(Announcement d,Integer id)
     {
@@ -60,7 +63,8 @@ public class AnnonceServiceImpl implements IAnnonceService{
 
     @Override
     @Transactional
-    public Announcement assignAnnonceToSponsoring(Integer idAnnonce, Integer IdSponsoring) {
+    public Announcement assignAnnonceToSponsoring(Integer idAnnonce, Integer IdSponsoring , float dis) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         List<Sponsoring> sponsorings = new ArrayList<>();
         Announcement announcement= annonceRepository.findById(idAnnonce).orElse(null);
         Sponsoring sponsoring=sponsoringRepository.findById(IdSponsoring).orElse(null);
@@ -70,8 +74,15 @@ public class AnnonceServiceImpl implements IAnnonceService{
 
             float priceTotalSpon = annonceRepository.sumPrice(idAnnonce);
             float priceTotal = announcement.getPriceA()+priceTotalSpon;
+
+   System.out.println(   announcement.getDiscount());
+
+        float priceTotalDiscount = calculateDiscountedPrice(idAnnonce, dis );
+
+
             announcement.setPriceTotalSpon(priceTotalSpon);
             announcement.setPriceTotal(priceTotal);
+            announcement.setPriceTotalDiscount(priceTotalDiscount);
 
 
         return announcement;
@@ -147,13 +158,24 @@ public class AnnonceServiceImpl implements IAnnonceService{
         return announcements;
     }
     @Override
-     public float calculateDiscountedPrice(Integer id, Integer discount) {
+     public float calculateDiscountedPrice(Integer id, float discount) {  //annonceRepository
         Announcement announcement= annonceRepository.findById(id).orElse(null);
-            float discountAmount = announcement.getPriceA() * discount / 100;
-            float discountedPrice = announcement.getPriceA() - discountAmount;
+            float discountAmount = announcement.getPriceTotal() * discount / 100;
+            float discountedPrice = announcement.getPriceTotal() - discountAmount;
+            announcement.setPriceTotalDiscount(discountedPrice);
             return discountedPrice;
         }
-        @Override
+
+
+
+    @Override
+    public void verifyAnnouncementById(Integer id) {
+        Announcement a =annonceRepository.findById(id).orElse(null);
+        a.setVerified(false);
+        annonceRepository.save(a);
+    }
+
+    @Override
         public AnnonceDto add(AnnonceDto annonceDto){
             Announcement announcement = annonceRepository.save(AnnonceMapper.mapToEntity(annonceDto));
         return AnnonceMapper.mapToDto(announcement);

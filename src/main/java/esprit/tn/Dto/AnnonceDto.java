@@ -23,4 +23,36 @@ public class AnnonceDto {
     private String quantite;
 
     private List<Sponsoring> sponsorings;
+
+    public TypeA getTypeA() {
+        return typeA;
+    }
+
+    public float getPriceA() {
+        return priceA;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public float getPriceS() {
+        return priceS;
+    }
+
+    public String getQuantite() {
+        return quantite;
+    }
+
+    public List<Sponsoring> getSponsorings() {
+        return sponsorings;
+    }
 }

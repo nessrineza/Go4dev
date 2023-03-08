@@ -17,12 +17,13 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import esprit.tn.Dto.AnnonceDto;
 import esprit.tn.Entites.Announcement;
 import lombok.Setter;
 
 @Setter
 public class PDFGenerator {
-    private List<Announcement> announcements;
+    private List<AnnonceDto> annonceDtos;
     public void generate(HttpServletResponse response) throws DocumentException, IOException {
         // Create the Object of Document
         Document document = new Document(PageSize.A4);
@@ -37,14 +38,14 @@ public class PDFGenerator {
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
         // Add to the document
         document.add(paragraph);
-        PdfPTable table = new PdfPTable(4);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100f);
-        table.setWidths(new int[] { 1, 2, 3, 4 });
-        table.setSpacingBefore(4);
+        table.setWidths(new int[] { 7, 7, 7, 7, 7, 7, 7});
+        table.setSpacingBefore(7);
         // Create Table Header
         PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(Color.MAGENTA);
-        cell.setPadding(4);
+        cell.setBackgroundColor(Color.DARK_GRAY);
+        cell.setPadding(7);
         // Add Font
         Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         font.setColor(Color.WHITE);
@@ -56,13 +57,24 @@ public class PDFGenerator {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Categorie d'annonce", font));
         table.addCell(cell);
+        cell.setPhrase(new Phrase("Type de meuble", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Prix de meuble", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Quantité des meubles", font));
+        table.addCell(cell);
 
 
-        for (Announcement announcement : announcements) {
-            table.addCell(String.valueOf(announcement.getTypeA()));
-            table.addCell(String.valueOf(announcement.getPriceA()));
-            table.addCell(String.valueOf(announcement.getDiscount()));
-            table.addCell(String.valueOf(announcement.getCategory()));
+
+        for (AnnonceDto annonceDto : annonceDtos) {
+            table.addCell(String.valueOf(annonceDto.getTypeA()));
+            table.addCell(String.valueOf(annonceDto.getPriceA()));
+            table.addCell(String.valueOf(annonceDto.getDiscount()));
+            table.addCell(String.valueOf(annonceDto.getCategory()));
+            table.addCell(String.valueOf(annonceDto.getType()));
+            table.addCell(String.valueOf(annonceDto.getPriceS()));
+            table.addCell(String.valueOf(annonceDto.getQuantite()));
+
         }
         // Add table to document
         document.add(table);
