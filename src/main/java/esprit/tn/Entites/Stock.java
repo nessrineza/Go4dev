@@ -1,4 +1,5 @@
 package esprit.tn.Entites;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,12 +29,13 @@ public class Stock implements Serializable{
     private  String libelleStock;
 
     private boolean checked;
+
     @Temporal(TemporalType.DATE)
     private Date createdAt;
 
     @Temporal(TemporalType.DATE)
     private Date updatedAt;
-
+@JsonIgnore
     @OneToMany(mappedBy = "stocks")
     List<Sponsoring> sponsorings;
 }

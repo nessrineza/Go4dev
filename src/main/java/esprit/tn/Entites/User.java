@@ -1,3 +1,6 @@
+
+
+
 package esprit.tn.Entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,9 +62,15 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Announcement> announcements;
+
     @ManyToMany
     @JsonIgnore
     private List<Publication> publications;
+
+   /* @ManyToMany
+    @JsonIgnore
+    private List<Forum> publications;*/
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Appointment> Appointments;
@@ -80,3 +89,4 @@ public class User {
 
 
 }
+
