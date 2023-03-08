@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Sponsoring implements Serializable {
     private String type;
     private String description;
     private float priceS;
-    private float picture;
+    private String picture;
     private String quantite;
     @JsonIgnore
     @ManyToMany(mappedBy ="sponsorings")
@@ -35,4 +36,14 @@ public class Sponsoring implements Serializable {
     @JsonIgnore
     @ManyToMany
     private List<Command>commands;
+    //@ManyToMany(mappedBy = "sponsoring",cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER) //(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE},mappedBy = "equipes")//(fetch = FetchType.EAGER, mappedBy = "equipes")
+    //@JsonIgnore
+    // List<Announcement> announcements = new ArrayList<>();
+
+
+    public Sponsoring(String type, float priceS, String quantite) {
+        this.type = type;
+        this.priceS = priceS;
+        this.quantite = quantite;
+    }
 }
