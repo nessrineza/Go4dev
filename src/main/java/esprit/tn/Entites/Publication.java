@@ -41,9 +41,9 @@ public class Publication {
     @JsonIgnore
     private List<Comment> comments;
     @ManyToMany(cascade = CascadeType.ALL,mappedBy = "publications",fetch = FetchType.EAGER)
+
     @JsonIgnore
     private List<User> users;
 
 }
-
 

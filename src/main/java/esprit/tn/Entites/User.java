@@ -1,10 +1,18 @@
+
+
+
 package esprit.tn.Entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import lombok.*;
+
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +27,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users",
@@ -50,6 +59,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+
+    String codePromo;
+
     private String resetPasswordToken;
     private String verificationCode ;
     private boolean blocked;
@@ -59,9 +71,19 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Announcement> announcements;
+
     @ManyToMany
     @JsonIgnore
     private List<Publication> publications;
+
+
+
+
+   /* @ManyToMany
+    @JsonIgnore
+    private List<Forum> publications;*/
+
+
     @OneToMany(cascade = CascadeType.ALL,mappedBy ="user" )
     @JsonIgnore
     List<Appointment> Appointments;
@@ -80,3 +102,4 @@ public class User {
 
 
 }
+

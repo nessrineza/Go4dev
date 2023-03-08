@@ -27,6 +27,7 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
+
     @Column(name = "appointment_date", columnDefinition = "DATE")
     private LocalDate appointmentDate;
 
@@ -36,10 +37,18 @@ public class Appointment implements Serializable {
 
     @Column(name = "appointment_end_time", columnDefinition = "TIME")
     private LocalTime appointmentEndTime;
+
+
+
+
+
     @ManyToOne
     User user;
     @OneToMany()
     private Set<Announcement> Announcements;
     @OneToMany(cascade = CascadeType.ALL,mappedBy="Appointment")
+
      Set<Payement> listPayement;
+
+
 }

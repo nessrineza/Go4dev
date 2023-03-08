@@ -1,0 +1,93 @@
+package esprit.tn.security;
+
+
+import esprit.tn.security.jwt.AuthEntryPointJwt;
+import esprit.tn.security.jwt.AuthTokenFilter;
+import esprit.tn.security.services.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
+  @Autowired
+  UserDetailsServiceImpl userDetailsService;
+
+  @Autowired
+  private AuthEntryPointJwt unauthorizedHandler;
+
+  @Bean
+  public AuthTokenFilter authenticationJwtTokenFilter() {
+    return new AuthTokenFilter();
+  }
+
+  @Override
+  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
+
+  @Bean
+  public DaoAuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+    authProvider.setUserDetailsService(userDetailsService);
+    authProvider.setPasswordEncoder(passwordEncoder());
+
+    return authProvider;
+  }
+
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    return authConfig.getAuthenticationManager();
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+   /* http.cors().and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeRequests().antMatchers("/**").permitAll()
+            .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+            .antMatchers("/client/**").hasAuthority("ROLE_CLIENT")
+            .antMatchers("/annonce/**").hasAuthority("ROLE_ADMIN")
+            .antMatchers("/annonce/**").hasAuthority("ROLE_CLIENT")
+            .antMatchers("/sponsoring/**").hasAuthority("ROLE_ADMIN")
+            .antMatchers("/sponsoring/**").hasAuthority("ROLE_CLIENT")
+
+            .anyRequest().authenticated();
+
+    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+  */ http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/**").permitAll()
+
+            .anyRequest()
+            .authenticated()
+            .and()
+            .httpBasic();
+  }
+
+}

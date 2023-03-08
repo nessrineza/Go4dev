@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcement")
+@ToString
 public class Announcement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +28,29 @@ public class Announcement implements Serializable {
     private float priceA;
     private float priceTotalSpon;
     private  float priceTotal;
+    boolean Verified;
+    Long usId;
+    private float priceTotalDiscount;
+
+
     private Integer discount;
     @Enumerated(EnumType.STRING)
     private  Category category;
     private  String picture;
+
     @JsonIgnore
     @ManyToOne
     private User user;
     @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    private List<Sponsoring> sponsorings;
 
+
+
+
+
+    private List<Sponsoring> sponsorings;
+    // @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)// (fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})//(fetch = FetchType.EAGER)
+    // @JoinTable(name = "announcement_sponsorings",joinColumns = { @JoinColumn(name = "id") },inverseJoinColumns = { @JoinColumn(name = "id") })
+    // List<Sponsoring> sponsorings = new ArrayList<>();// @JsonIgnore
 
 }
 

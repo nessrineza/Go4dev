@@ -1,4 +1,4 @@
-package esprit.tn.Repository;
+package esprit.tn.repository;
 
 import esprit.tn.Entites.Payement;
 import org.springframework.data.jpa.repository.JpaRepository;

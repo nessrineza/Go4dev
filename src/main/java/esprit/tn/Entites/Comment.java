@@ -31,6 +31,8 @@ public class Comment {
     @Column(name = "report"/*, columnDefinition = "INT DEFAULT '0'"*/)
     private Integer report=0;
 
+private String pseudo;
+
     @ManyToOne
     @JsonIgnore
     private Publication publication;
