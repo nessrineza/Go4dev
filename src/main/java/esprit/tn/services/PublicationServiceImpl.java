@@ -6,6 +6,7 @@ import esprit.tn.Entites.User;
 import esprit.tn.repository.PublicationRepository;
 import esprit.tn.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,9 @@ public class PublicationServiceImpl implements PublicationService {
 
 
     @Override
+
     public Publication addPublication(Publication p) {
+
 
         return publicationRepository.save(p);
 
@@ -97,7 +100,7 @@ public class PublicationServiceImpl implements PublicationService {
 
                 EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
                         pub.getUsers().get(0).getUsername() + "'s publication has been reported "
-                                + pub.getReport() + " times  ",
+                                + pub.getReport() + "  times  ",
                         "Publication reported", "");
                 emailService.sendSimpleMail(emailDetails);
                 EmailDetails emailDetails2 = new EmailDetails

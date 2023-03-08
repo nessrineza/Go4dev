@@ -1,11 +1,14 @@
 package esprit.tn.services;
 
 import esprit.tn.Entites.Publication;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 public interface PublicationService {
+    @Transactional
+
     Publication addPublication(Publication p);
 
     // read operation
