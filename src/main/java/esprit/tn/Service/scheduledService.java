@@ -1,7 +1,7 @@
 package esprit.tn.Service;
 
 import esprit.tn.Entites.Appointment;
-import esprit.tn.Repository.appointementRepository;
+import esprit.tn.repository.appointementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

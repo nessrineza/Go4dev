@@ -2,8 +2,8 @@ package esprit.tn.Service;
 
 import esprit.tn.Entites.Appointment;
 import esprit.tn.Entites.Payement;
-import esprit.tn.Repository.appointementRepository;
-import esprit.tn.Repository.payementRepository;
+import esprit.tn.repository.appointementRepository;
+import esprit.tn.repository.payementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
