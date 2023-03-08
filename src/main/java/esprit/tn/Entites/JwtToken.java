@@ -15,6 +15,9 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
+
+
 public class JwtToken implements Serializable {
 
     @Id
@@ -29,5 +32,6 @@ public class JwtToken implements Serializable {
 
     @Column(name = "expiration_date")
     private Date expirationDate;
+
 
 }
