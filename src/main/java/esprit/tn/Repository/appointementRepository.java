@@ -1,6 +1,7 @@
 package esprit.tn.repository;
 
 import esprit.tn.Entites.Appointment;
+import esprit.tn.Entites.AppointmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,12 @@ public interface appointementRepository extends JpaRepository<Appointment,Intege
 
 
     @Query("SELECT CASE WHEN COUNT(appt) > 0 THEN true ELSE false END FROM Appointment appt WHERE (((appt.appointmentStartTime >= :startime) AND (appt.appointmentStartTime < :endtime)) OR ((appt.appointmentEndTime > :startime) AND  (appt.appointmentEndTime <= :endtime) ) OR ((appt.appointmentStartTime <= :startime) AND (appt.appointmentEndTime >= :endtime) )  OR ((appt.appointmentStartTime >= :startime) AND (appt.appointmentEndTime <= :endtime)))")
-    boolean isInBetweenTwoTimeAndDate(@Param("startime") LocalTime startime, @Param("endtime") LocalTime endtime  );
+    boolean isInBetweenTwoTime(@Param("startime") LocalTime startime, @Param("endtime") LocalTime endtime  );
+
+    @Query("SELECT CASE WHEN COUNT(appt) > 0 THEN true ELSE false END FROM Appointment appt WHERE    ((appt.appointmentDate >= :date)   and (((appt.appointmentStartTime >= :startime) AND (appt.appointmentStartTime < :endtime)) OR ((appt.appointmentEndTime > :startime) AND  (appt.appointmentEndTime <= :endtime) ) OR ((appt.appointmentStartTime <= :startime) AND (appt.appointmentEndTime >= :endtime) )  OR ((appt.appointmentStartTime >= :startime) AND (appt.appointmentEndTime <= :endtime))))")
+    boolean isInBetweenTwoTimeAndDate(@Param("date") LocalDate date, @Param("startime") LocalTime startime, @Param("endtime") LocalTime endtime  );
+
     List<Appointment> findAppointmentsByAppointmentDate(LocalDate date);
+    @Query("select appt  from  Appointment appt WHERE (appt.appointmentStatus=esprit.tn.Entites.AppointmentStatus.Available)and (appt.appointmentDate=:date)")
+    List<Appointment> findAppointmentsByavailbleAndDate(@Param("date")LocalDate date);
 }
