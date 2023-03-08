@@ -36,6 +36,9 @@ public class Appointment implements Serializable {
 
     @Column(name = "appointment_end_time", columnDefinition = "TIME")
     private LocalTime appointmentEndTime;
+    @Column(name = "appointment_status" )
+    @Enumerated(EnumType.STRING)
+    AppointmentStatus appointmentStatus;
     @ManyToOne
     User user;
     @OneToMany()
