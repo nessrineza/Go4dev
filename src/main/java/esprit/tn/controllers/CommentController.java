@@ -3,11 +3,14 @@ package esprit.tn.controllers;
 import esprit.tn.Entites.Comment;
 import esprit.tn.Entites.EmailDetails;
 import esprit.tn.repository.CommentRepository;
+import esprit.tn.repository.UserRepository;
 import esprit.tn.services.BadWordFilter;
 import esprit.tn.services.CommentService;
+import esprit.tn.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -16,11 +19,14 @@ import java.util.List;
 public class CommentController {
     @Autowired
     CommentService commentService;
+    @Autowired
+    PublicationService publicationService;
    /* @Autowired
     EmailService emailService;*/
     @Autowired
     private CommentRepository commentRepository;
-
+@Autowired
+    private UserRepository userRepository;
 BadWordFilter badWordFilter;
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
@@ -29,11 +35,15 @@ BadWordFilter badWordFilter;
     // Annotation
 
     // Save operation
-    @PostMapping("/add/{id}")
+    @Transactional
+
+    @PostMapping("/add/{id}/{id2}")
     public Comment saveComment(
-            @RequestBody Comment comment,@PathVariable("id")Integer pubId)
+            @RequestBody Comment comment,
+            @PathVariable("id")Integer pubId,@PathVariable("id2")Long userId)
     {
-        /*bad word implementation*/
+comment.setPseudo(userRepository.getById(userId).getUsername());
+publicationService.assignUserToPub(pubId,userId);
 
         comment.setContent( badWordFilter.getCensoredText(comment.getContent()));
 
