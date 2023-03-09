@@ -63,7 +63,7 @@ public class AuthController {
       List<String> roles = userDetails.getAuthorities().stream()
               .map(item -> item.getAuthority())
               .collect(Collectors.toList());
-
+    System.out.println(jwt.toString());
       return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwt.toString())
               .body(new UserInfoResponse(userDetails.getId(),
                       userDetails.getUsername(),
@@ -74,7 +74,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<?> registerUser( @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }

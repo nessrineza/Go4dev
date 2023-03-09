@@ -16,7 +16,7 @@ import java.util.Date;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+     private Integer id;
      private  String content;
      private int likes;
      private Date date ;

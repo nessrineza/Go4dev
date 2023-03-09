@@ -63,6 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/auth/**").permitAll()
             .antMatchers("/admin/**").permitAll()
             .antMatchers("/client/**").permitAll()
+            .antMatchers("/signup/**").permitAll()
+            .antMatchers("/signin/**").permitAll()
             /*.antMatchers("/claim/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/Answers/**").hasAuthority("ROLE_CLIENT")
             .antMatchers("/likes/**").hasAuthority("ROLE_EMPLOYEE")
@@ -74,6 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/sendingEmail/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/events/**").permitAll() dd//*/
             .antMatchers("/api/delete/**").permitAll()
+            .antMatchers("**").permitAll()
             .anyRequest().authenticated();
 
 

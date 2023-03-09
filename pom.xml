@@ -15,6 +15,8 @@
     <description>back-end</description>
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +55,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>esprit.tn</groupId>
+            <artifactId>back-end</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nexmo</groupId>
+            <artifactId>client</artifactId>
+            <version>4.2.0</version>
         </dependency>
     </dependencies>
 
