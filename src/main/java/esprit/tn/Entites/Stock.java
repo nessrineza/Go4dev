@@ -1,5 +1,4 @@
 package esprit.tn.Entites;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,28 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Stock")
+
 public class Stock implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idStock")
-    private Integer idStock;
-
-    private Integer quantity;
-
-    private Integer quantityMin;
-
-    private  String libelleStock;
-
-    private boolean checked;
-
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
-
-    @Temporal(TemporalType.DATE)
-    private Date updatedAt;
-
-@JsonIgnore
-
+    @Column(name="id")
+    private Integer id;
+    private Integer Quantity;
+    private  String Description;
     @OneToMany(mappedBy = "stocks")
     List<Sponsoring> sponsorings;
 }

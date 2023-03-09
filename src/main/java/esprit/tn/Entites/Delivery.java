@@ -1,5 +1,6 @@
 package esprit.tn.Entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,11 @@ public class Delivery implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
-    private String StartingPoint;
-    private String EndPoint;
+    private String spoint;
+    private String dest;
     @Temporal(TemporalType.DATE)
-    private Date Date;
+    private Date date;
+    @JsonIgnore
     @OneToOne
     private Command commands;
 

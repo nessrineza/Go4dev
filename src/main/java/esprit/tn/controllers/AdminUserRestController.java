@@ -1,12 +1,14 @@
 package esprit.tn.controllers;
 
-import esprit.tn.Entites.Role;
 import esprit.tn.Entites.User;
+import esprit.tn.payload.request.SignupRequest;
 import esprit.tn.payload.response.MessageResponse;
 import esprit.tn.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -15,64 +17,41 @@ public class AdminUserRestController {
     @Autowired
     IUserService userService;
 
-
     @DeleteMapping("/delete/{idUser}")
     public ResponseEntity<?> deleteUser( @PathVariable Long idUser) {
         try {
-            if(userService.findUserbyId(idUser)==null){
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("ERROR: user does not exist!"));
-            }
             userService.removeUser(idUser);
             return ResponseEntity
                     .ok()
                     .body(new MessageResponse(" Deleted successfully!"));
-
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("ERROR: Failed to delete Client!"));
+                    .body(new MessageResponse(" Failed to delete Client!"));
         }
     }
     @GetMapping("/getAll")
     public  ResponseEntity<?> findAll(){
-        try {
-            List<User> users =  userService.findAllUser();
-            return ResponseEntity.ok().body(users);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("ERROR: Failed to load the users list!"));
-        }
+        List<User> users =  userService.findAllUser();
+        return ResponseEntity.ok().body(users);
     }
-    @PostMapping("/banclient/{userId}")
-    public ResponseEntity< ? > banClient(@PathVariable Long userId) {
+    @PostMapping("/banclient/{id}")
+    public ResponseEntity< ? > banClient(@PathVariable Long id) {
         try {
-            if(userService.findUserbyId(userId)==null){
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("ERROR: user does not exist!"));
-            }
-            userService.blockUser(userId);
+            userService.blockUser(id);
             return ResponseEntity
                     .ok()
-                    .body(new MessageResponse("This account is blocked successfully!"));
+                    .body(new MessageResponse(" blocked successfully!"));
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse(" Failed to block this account!"));
+                    .body(new MessageResponse(" Failed to block employee!"));
         }
     }
-    @PostMapping("/unbanclient/{userId}")
-    public ResponseEntity< ? > unbanClient(@PathVariable Long userId) {
+    @PostMapping("/unbanclient/{id}")
+    public ResponseEntity< ? > unbanClient(@PathVariable Long id) {
         try {
-            if(userService.findUserbyId(userId)==null){
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("ERROR: user does not exist!"));
-            }
-            userService.unBlockUser(userId);
+            userService.unBlockUser(id);
             return ResponseEntity
                     .ok()
                     .body(new MessageResponse(" un blocked successfully!"));
@@ -82,20 +61,4 @@ public class AdminUserRestController {
                     .body(new MessageResponse(" Failed to unblock employee!"));
         }
     }
-    @GetMapping("/getuser/{userId}")
-    public ResponseEntity<?> findById(@PathVariable Long userId){
-        if(userService.findUserbyId(userId)==null){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("ERROR: user does not exist!"));
-        }
-        User user =  userService.findUserbyId(userId);
-        return ResponseEntity.ok().body(user);
-    }
-    @GetMapping("/getbyrole")
-    public  ResponseEntity<?> findByRole(@RequestBody Role role){
-        List<User> users =  userService.findUserByRole(role.getName());
-        return ResponseEntity.ok().body(users);
-    }
-
 }

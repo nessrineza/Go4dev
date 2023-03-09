@@ -1,56 +1,38 @@
 package esprit.tn.Entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Announcement")
-@ToString
 public class Announcement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
     @Enumerated(EnumType.STRING)
-    private TypeA typeA;
-    private  String location;
-    private  String description;
-    private float priceA;
-    private float priceTotalSpon;
-    private  float priceTotal;
-    boolean Verified;
-    Long usId;
-    private float priceTotalDiscount;
-
-
-    private Integer discount;
+    private TypeA TypeA;
+    private  String Location;
+    private  String Description;
+    private float Price;
     @Enumerated(EnumType.STRING)
-    private  Category category;
-    private  String picture;
-
-    @JsonIgnore
+    private  Category Category;
+    private  String Picture;
     @ManyToOne
     private User user;
-    @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-
-
-
-
-
+    @ManyToMany()
     private List<Sponsoring> sponsorings;
-    // @ManyToMany(cascade = {CascadeType.PERSIST},fetch = FetchType.EAGER)// (fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE})//(fetch = FetchType.EAGER)
-    // @JoinTable(name = "announcement_sponsorings",joinColumns = { @JoinColumn(name = "id") },inverseJoinColumns = { @JoinColumn(name = "id") })
-    // List<Sponsoring> sponsorings = new ArrayList<>();// @JsonIgnore
+
 
 }
 
