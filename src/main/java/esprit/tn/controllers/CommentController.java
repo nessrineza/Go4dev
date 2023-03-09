@@ -89,6 +89,12 @@ publicationService.assignUserToPub(pubId,userId);
 
         return commentRepository.CommentSortedByLikes();
     }
+    @GetMapping("/CommentsSortedDate")
+    public List<Comment> retrieveCommentsSortedDate()
+    {
+
+        return commentRepository.CommentSortedByDate();
+    }
 
   /*  @PutMapping("/assignComment/{id1}/{id2}")
     public void assignCommentToPublication

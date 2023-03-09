@@ -9,4 +9,6 @@ import java.util.List;
 public interface CommentRepository extends CrudRepository<Comment,Integer> {
 @Query(value ="SELECT * FROM comment group by likes desc", nativeQuery = true)
     List<Comment>CommentSortedByLikes();
+    @Query(value ="SELECT * FROM comment group by date desc", nativeQuery = true)
+    List<Comment>CommentSortedByDate();
 }

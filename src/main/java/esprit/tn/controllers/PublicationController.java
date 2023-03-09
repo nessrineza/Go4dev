@@ -1,5 +1,6 @@
 package esprit.tn.controllers;
 
+import esprit.tn.Entites.Comment;
 import esprit.tn.Entites.EmailDetails;
 import esprit.tn.Entites.Publication;
 import esprit.tn.Entites.User;
@@ -88,4 +89,11 @@ else{
     }
     @Scheduled(fixedRate = 60000)
     @PostMapping("/signalAction")public void signalAction(){publicationService.signalAction();}
+
+    @GetMapping("/PublicationsSortedFav")
+    public List<Publication> retrievePublicationsSortedDate()
+    {
+
+        return publicationRepository.publicationSortedByFavoris();
+    }
 }

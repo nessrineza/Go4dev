@@ -1,10 +1,12 @@
 package esprit.tn.controllers;
 
 import esprit.tn.Entites.Room;
+import esprit.tn.repository.RoomRepository;
 import esprit.tn.services.PublicationService;
 import esprit.tn.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class RoomController {
     RoomService roomService;
    @Autowired
    PublicationService publicationService;
+    @Autowired
+    private RoomRepository roomRepository;
+
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
     }
@@ -68,4 +73,9 @@ public class RoomController {
         roomService.removeRoomById(RoomId);
         return "Deleted Successfully";
     }
+    @Scheduled(fixedRate = 3600000)
+    @PostMapping("/signalAction")public void signalAction(){roomService.signalAction();}
+
+    @GetMapping("/sortedByFav")
+    public List<Room> sortedByfav(){return roomRepository.SortedByFavoris();}
 }
