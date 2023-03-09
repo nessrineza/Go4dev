@@ -65,12 +65,20 @@ else{
 
     // Update operation
     @PutMapping("/update")
-    public Publication
+    public ResponseEntity<String>
     updatePublication(@RequestBody Publication publication)
     {
 
-        return publicationService.updatePublication(publication);
-    }
+        if(publicationService.isFormal(publication.getSubject())){
+        publicationService.updatePublication(publication);
+
+
+
+        return ResponseEntity.ok("Publication updated successfully.");}
+else{
+        return ResponseEntity.ok("Your publication will not be updated because its subject context wasn't formal") ;}}
+
+
 
     // Delete operation
     @DeleteMapping("/delete/{id}")

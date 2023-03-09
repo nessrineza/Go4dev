@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -29,12 +30,14 @@ public class RoomController {
     // Annotation
 
     // Save operation
-    @PostMapping("/add")
+    @Transactional
+    @PostMapping("/add/{id}")
     public ResponseEntity<String> saveRoom(
-            @RequestBody Room room)
+            @RequestBody Room room,@PathVariable("id") Long id)
     {
         if(publicationService.isFormal(room.getTopic())){
             roomService.addRoom(room);
+             roomService.assignUserToRoom(room, id);
 
             return ResponseEntity.ok("Input processed successfully.");}
         else{

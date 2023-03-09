@@ -92,50 +92,52 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public void signalAction() {
 
+try {
 
-        List<Publication> pubs = retrieveAllPublications();
-        for (Publication pub : pubs) {
-            if (pub.getReport() >= 3 && !pub.isVerif()) {/*send mail to admin and user
+
+    List<Publication> pubs = retrieveAllPublications();
+    for (Publication pub : pubs) {
+        if (pub.getReport() >= 3 && !pub.isVerif()) {/*send mail to admin and user
                 pub.getUsers().get(1).getUsername();*/
 
-                EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
-                        pub.getUsers().get(0).getUsername() + "'s publication has been reported "
-                                + pub.getReport() + "  times  ",
-                        "Publication reported", "");
-                emailService.sendSimpleMail(emailDetails);
-                EmailDetails emailDetails2 = new EmailDetails
-                        (pub.getUsers().get(0).getEmail(),
+            EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
+                    pub.getUsers().get(0).getUsername() + "'s publication has been reported "
+                            + pub.getReport() + "  times  ",
+                    "Publication reported", "");
+            emailService.sendSimpleMail(emailDetails);
+            EmailDetails emailDetails2 = new EmailDetails
+                    (pub.getUsers().get(0).getEmail(),
 
-                                "Your publication has been reported " + pub.getReport() + "times,it might be deleted.Contact admins for more info.  ",
-                                "Publication reported", "");
-                emailService.sendSimpleMail(emailDetails2);
-                pub.setVerif(true);
-                updatePublication(pub);
-                System.out.println("publication reported multiple times");
-            } else if
-            (pub.getReport() > 5
-                            && ((pub.getReport() * 0.15) > (pub.getUsers().size())) ||
-                            (pub.getReport() > 5 &&
-                                    (pub.getReport() * 0.25) > (pub.getFavoris())))
-                /*les Reportes supérieur à 15% de nombre des users => supprimer automatiquement le pub
-                 * et envoyer mail à user et admin  */ {
-                EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
-                        pub.getUsers().get(0).getUsername()
-                                + "'s publication has been deleted due to multiple reports ",
-                        "Publication deleted", "");
-                emailService.sendSimpleMail(emailDetails);
-                EmailDetails emailDetails2 = new EmailDetails
-                        (pub.getUsers().get(0).getEmail(),
+                            "Your publication has been reported " + pub.getReport() + "times,it might be deleted.Contact admins for more info.  ",
+                            "Publication reported", "");
+            emailService.sendSimpleMail(emailDetails2);
+            pub.setVerif(true);
+            updatePublication(pub);
+            System.out.println("publication reported multiple times");
+        } else if
+        (pub.getReport() > 5
+                        && ((pub.getReport() * 0.15) > (pub.getUsers().size())) ||
+                        (pub.getReport() > 5 &&
+                                (pub.getReport() * 0.25) > (pub.getFavoris())))
+            /*les Reportes supérieur à 15% de nombre des users => supprimer automatiquement le pub
+             * et envoyer mail à user et admin  */ {
+            EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
+                    pub.getUsers().get(0).getUsername()
+                            + "'s publication has been deleted due to multiple reports ",
+                    "Publication deleted", "");
+            emailService.sendSimpleMail(emailDetails);
+            EmailDetails emailDetails2 = new EmailDetails
+                    (pub.getUsers().get(0).getEmail(),
 
-                                "Your publication has been deleted  ",
-                                "Publication deleted", "");
-                emailService.sendSimpleMail(emailDetails2);
-                removePublicationById(pub.getId());
-                System.out.println("publication removed");
-                System.out.println(pub.getUsers().get(1).getUsername());
-            }
+                            "Your publication has been deleted  ",
+                            "Publication deleted", "");
+            emailService.sendSimpleMail(emailDetails2);
+            removePublicationById(pub.getId());
+            System.out.println("publication removed");
+            System.out.println(pub.getUsers().get(0).getUsername());
         }
     }
+} catch (Exception ie ){ie.getMessage();}}
 
     public Boolean isFormal(String text) {
         int informalCount = 0;

@@ -68,10 +68,11 @@ publicationService.assignUserToPub(pubId,userId);
     // Update operation
     @PutMapping("/update")
     public Comment
-    updateComment(@RequestBody Comment Comment)
+    updateComment(@RequestBody Comment comment)
     {
+        comment.setContent( badWordFilter.getCensoredText(comment.getContent()));
 
-        return commentService.updateComment(Comment);
+        return commentService.updateComment(comment);
     }
 
     // Delete operation
