@@ -127,7 +127,7 @@ public class AnnonceController {
      @PutMapping("assignAnnonceToSpon/{idAn}/{idSpo}")
      public Announcement assignAnnonceToSponsoring(@PathVariable("idAn") Integer idAnnonce,@PathVariable("idSpo") Integer IdSponsoring){
         Announcement announcement= annonceRepository.findById(idAnnonce).orElse(null);
-        return annonceServiceImpl.assignAnnonceToSponsoring(idAnnonce,IdSponsoring, announcement.getDiscount());
+        return annonceServiceImpl.assignAnnonceToSponsoring(idAnnonce,IdSponsoring, 10);
      }
     @GetMapping("/{id}/{discount}")
     public float getDiscountedPrice(@PathVariable("id") Integer id,
