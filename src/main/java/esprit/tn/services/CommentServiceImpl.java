@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -61,6 +62,10 @@ return         commentRepository.save(c);
         return commentRepository.findById(idComment).orElse(null);
     }
 
+    @Override
+    public List<Comment> retrieveCommentsByPub(Integer idPub) {
+        return commentRepository.findCommentsByPublication_Id(idPub);
+    }
 
 
     @Override
@@ -69,6 +74,11 @@ return         commentRepository.save(c);
         commentRepository.findAll().forEach(Comments::add);
 
         return Comments;
+    }
+    public void likeComment(Integer idCom){
+        Comment c=commentRepository.findCommentByIdIs(idCom);
+        c.setLikes(c.getLikes()+1);
+
     }
 
     /*@Override

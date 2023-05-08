@@ -11,4 +11,7 @@ public interface CommentRepository extends CrudRepository<Comment,Integer> {
     List<Comment>CommentSortedByLikes();
     @Query(value ="SELECT * FROM comment group by date desc", nativeQuery = true)
     List<Comment>CommentSortedByDate();
+    public List<Comment> findCommentsByPublication_Id(Integer id);
+
+    public Comment findCommentByIdIs(Integer idCom);
 }

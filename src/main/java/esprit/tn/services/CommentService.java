@@ -9,6 +9,7 @@ public interface CommentService {
     // read operation
     List<Comment> retrieveAllComments();
     Comment retrieveComment(Integer idComment) ;
+    List<Comment> retrieveCommentsByPub(Integer idPub);
 
     Comment updateComment(Comment p);
 
@@ -16,6 +17,8 @@ public interface CommentService {
     // delete operation
     void removeCommentById(Integer idComment);
     public Comment assignCommentToPublication(Comment c,Integer publciationId) ;
+
+    public void likeComment(Integer idCom);
 
 }
 

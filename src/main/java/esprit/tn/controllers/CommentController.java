@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/Comment")
 
@@ -41,8 +43,8 @@ BadWordFilter badWordFilter;
     public Comment saveComment(
             @RequestBody Comment comment,
             @PathVariable("id")Integer pubId,@PathVariable("id2")Long userId)
-    {
-comment.setPseudo(userRepository.getById(userId).getUsername());
+        {
+    comment.setPseudo(userRepository.getById(userId).getUsername());
 publicationService.assignUserToPub(pubId,userId);
 
         comment.setContent( badWordFilter.getCensoredText(comment.getContent()));
@@ -95,6 +97,28 @@ publicationService.assignUserToPub(pubId,userId);
     {
 
         return commentRepository.CommentSortedByDate();
+    }
+    @GetMapping("/CommentsByPub/{id}")
+    public List<Comment> retrieveCommentsByPub(@PathVariable("id") Integer idPub)
+    {
+
+        return commentService.retrieveCommentsByPub(idPub);
+    }
+    @PutMapping("/likes/{id}")
+    public void upLikes(@PathVariable("id") Integer id)
+    {Comment c=commentRepository.findCommentByIdIs(id);
+        c.setLikes(c.getLikes()+1);
+
+
+        commentService.updateComment(c);
+    }
+    @PutMapping("/report/{id}")
+    public void upReport(@PathVariable("id") Integer id)
+    {Comment c=commentRepository.findCommentByIdIs(id);
+        c.setReport(c.getReport()+1);
+
+
+        commentService.updateComment(c);
     }
 
   /*  @PutMapping("/assignComment/{id1}/{id2}")

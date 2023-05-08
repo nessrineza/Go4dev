@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.websocket.server.PathParam;
 import java.util.List;
+import java.util.Optional;
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/publication")
 
@@ -104,4 +107,29 @@ else{
 
         return publicationRepository.publicationSortedByFavoris();
     }
+
+
+
+   @PutMapping("/likes/{id}")
+    public void upLikes(@PathVariable("id") Integer id)
+    {Publication c=publicationRepository.findPublicationById(id);
+        c.setFavoris(c.getFavoris()+1);
+
+
+        publicationService.updatePublication(c);
+    }
+    @PutMapping("/report/{id}")
+    public void upReport(@PathVariable("id") Integer id)
+    {Publication c=publicationRepository.findPublicationById(id);
+        c.setReport(c.getReport()+1);
+
+
+        publicationService.updatePublication(c);
+    }
+
+
+
+
+
+
 }
