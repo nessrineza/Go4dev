@@ -112,6 +112,14 @@ publicationService.assignUserToPub(pubId,userId);
 
         commentService.updateComment(c);
     }
+    @PutMapping("/haha/{id}")
+    public void upHaha(@PathVariable("id") Integer id)
+    {Comment c=commentRepository.findCommentByIdIs(id);
+        c.setUnlikes(c.getUnlikes()+1);
+
+
+        commentService.updateComment(c);
+    }
     @PutMapping("/report/{id}")
     public void upReport(@PathVariable("id") Integer id)
     {Comment c=commentRepository.findCommentByIdIs(id);

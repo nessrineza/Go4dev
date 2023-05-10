@@ -5,6 +5,7 @@ import esprit.tn.Entites.EmailDetails;
 import esprit.tn.Entites.Publication;
 import esprit.tn.Entites.User;
 import esprit.tn.repository.PublicationRepository;
+import esprit.tn.services.BadWordFilter;
 import esprit.tn.services.EmailService;
 import esprit.tn.services.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class PublicationController {
     EmailService emailService;
   @Autowired
     PublicationRepository publicationRepository;
+    BadWordFilter badWordFilter;
+
 
     public PublicationController(PublicationService publicationService) {
         this.publicationService = publicationService;
@@ -37,18 +40,15 @@ public class PublicationController {
 
     // Save operation
     @PostMapping("/add/{id}")
-    public ResponseEntity<String> savePublication(
+    public Publication savePublication(
             @RequestBody Publication publication, @PathVariable("id")Long id)
     {
-if(publicationService.isFormal(publication.getSubject())){
        publicationService.addPublication(publication);
     Publication pub= publicationRepository.findPublicationByDate(publication.getDate());
-       publicationService.assignUserToPub(pub.getId(), id);
+    pub.setDescription( badWordFilter.getCensoredText(pub.getDescription()));
 
-
-        return ResponseEntity.ok("Input processed successfully.");}
-else{
-    return ResponseEntity.ok("Your publication wasn't added because its subject context wasn't formal") ;}}
+    publicationService.assignUserToPub(pub.getId(), id);
+return publicationRepository.save(pub);}
 
 
     // Read operation

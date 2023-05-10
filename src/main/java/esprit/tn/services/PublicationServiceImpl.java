@@ -100,7 +100,7 @@ try {
         if (pub.getReport() >= 3 && !pub.isVerif()) {/*send mail to admin and user
                 pub.getUsers().get(1).getUsername();*/
 
-            EmailDetails emailDetails = new EmailDetails(/*admin email*/"adminMail@esprit.tn",
+            EmailDetails emailDetails = new EmailDetails(/*admin email*/"becheikh.wassim@esprit.tn",
                     pub.getUsers().get(0).getUsername() + "'s publication has been reported "
                             + pub.getReport() + "  times  ",
                     "Publication reported", "");
@@ -132,9 +132,16 @@ try {
                             "Your publication has been deleted  ",
                             "Publication deleted", "");
             emailService.sendSimpleMail(emailDetails2);
-            removePublicationById(pub.getId());
+            EmailDetails emailDetails3= new EmailDetails
+                    ("becheikh.wassim@esprit.tn",
+
+                            pub.getUsers().get(0).getUsername()+" publication has been deleted  ",
+                            "Publication deleted", "");
+            emailService.sendSimpleMail(emailDetails2);
+            publicationRepository.delete(pub);
             System.out.println("publication removed");
             System.out.println(pub.getUsers().get(0).getUsername());
+        }else{            System.out.println("Aucun soucis pour l'instant");
         }
     }
 } catch (Exception ie ){ie.getMessage();}}

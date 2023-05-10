@@ -12,6 +12,7 @@ public interface PublicationRepository extends CrudRepository<Publication,Intege
     public Publication findPublicationByDate(Date date);
     @Query(value ="SELECT * FROM publication group by favoris desc", nativeQuery = true)
     List<Publication> publicationSortedByFavoris();
+    void deletePublicationById(Integer id );
     public Publication findPublicationById(Integer id);
 
 }
